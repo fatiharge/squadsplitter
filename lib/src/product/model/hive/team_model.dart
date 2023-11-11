@@ -42,11 +42,11 @@ class TeamModel {
   String createdPlayer;
 
   @HiveField(3)
-  List<String> playerType;
+  Map<String,int> playerType;
 
   @HiveField(5)
   String gameType;
 
 
-  static const String name = "TeamModelVer1";
+  static const String name = "TeamModelVer2";
 }

@@ -20,7 +20,7 @@ class TeamModelAdapter extends TypeAdapter<TeamModel> {
       gameName: fields[0] as String,
       teamCount: fields[1] as int,
       createdPlayer: fields[2] as String,
-      playerType: (fields[3] as List).cast<String>(),
+      playerType: (fields[3] as Map).cast<String, int>(),
       gameType: fields[5] as String,
     );
   }

@@ -30,7 +30,7 @@ class CreateTeamView extends StatefulWidget {
 }
 
 class _CreateTeamViewState extends CreateTeamViewModel with ValidateMixin {
-  List<String> selectedList = [];
+  Map<String, int> selectedList = {};
   TextEditingController countController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   GameModel? selectedGame;
@@ -134,11 +134,42 @@ class _CreateTeamViewState extends CreateTeamViewModel with ValidateMixin {
                                     .map(
                                       (String str) => CheckboxListTile(
                                         title: Text(str),
-                                        value: selectedList.contains(str),
+                                        subtitle: Row(
+                                          children: [
+                                            IconButton(
+                                                onPressed: selectedList.containsKey(str)
+                                                    ? selectedList[str] != 1
+                                                        ? () {
+                                                            setState(() {
+                                                              selectedList[str] = selectedList[str]! - 1;
+                                                            });
+                                                          }
+                                                        : () {
+                                                            setState(() {
+                                                              selectedList.remove(str);
+                                                            });
+                                                          }
+                                                    : null,
+                                                icon: const Icon(Icons.remove)),
+                                            Text(selectedList.containsKey(str)
+                                                ? selectedList[str].toString()
+                                                : 0.toString()),
+                                            IconButton(
+                                                onPressed: selectedList.containsKey(str)
+                                                    ? () {
+                                                        setState(() {
+                                                          selectedList[str] = selectedList[str]! + 1;
+                                                        });
+                                                      }
+                                                    : null,
+                                                icon: const Icon(Icons.add)),
+                                          ],
+                                        ),
+                                        value: selectedList.containsKey(str),
                                         onChanged: (value) {
                                           setState(() {
                                             if (value ?? false) {
-                                              selectedList.add(str);
+                                              selectedList.addAll({str: 1});
                                             } else {
                                               selectedList.remove(str);
                                             }
@@ -172,16 +203,15 @@ class _CreateTeamViewState extends CreateTeamViewModel with ValidateMixin {
             ),
             ElevatedButton(
               onPressed: () {
-                if ((formKey.currentState?.validate() ?? false) && selectedGame?.gameName != null ) {
+                if ((formKey.currentState?.validate() ?? false) && selectedGame?.gameName != null) {
                   Hive.box<TeamModel>(TeamModel.name).put(
                     nameController.value.text,
                     TeamModel(
-                      gameName: nameController.value.text,
-                      teamCount: int.tryParse(countController.value.text) ?? 10,
-                      createdPlayer: Mazarbul.instance.getString(MazarbulKeyEnum.nickname) ?? "nameless",
-                      playerType: selectedList,
-                      gameType: selectedGame!.gameName
-                    ),
+                        gameName: nameController.value.text,
+                        teamCount: int.tryParse(countController.value.text) ?? 10,
+                        createdPlayer: Mazarbul.instance.getString(MazarbulKeyEnum.nickname) ?? "nameless",
+                        playerType: selectedList,
+                        gameType: selectedGame!.gameName),
                   );
                   Navigator.pop(context);
                 }

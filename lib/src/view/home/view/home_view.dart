@@ -102,13 +102,16 @@ class _HomeViewState extends HomeViewModel {
                       .map(
                         (TeamModel tm) => Card(
                           child: ListTile(
+                            onTap: () {
+
+                            },
                             title: Text(tm.gameName),
                             trailing: editableMood
                                 ? IconButton(
                                     onPressed: () {
                                       box.delete(tm.gameName);
                                     },
-                                    icon: Icon(Icons.delete))
+                                    icon: const Icon(Icons.delete))
                                 : null,
                           ),
                         ),

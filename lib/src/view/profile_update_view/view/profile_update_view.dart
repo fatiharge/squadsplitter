@@ -17,6 +17,7 @@ import 'package:squadsplitter/src/core/core_mixin/validate_mixin.dart';
 import 'package:squadsplitter/src/product/extension/context_extension.dart';
 import 'package:squadsplitter/src/product/extension/padding_extension_symetric.dart';
 import 'package:squadsplitter/src/product/mixin/toast_mixin.dart';
+import 'package:squadsplitter/src/view/update_nickname/view/update_nickname_view.dart';
 
 import '../../../core/components/app_spacing.dart';
 import '../../../product/enum/mazarbul_key_enum.dart';
@@ -31,7 +32,7 @@ class ProfileUpdateView extends StatefulWidget {
 
 class _ProfileUpdateViewState extends ProfileUpdateViewModel with ValidateMixin, ToastMixin {
   TextEditingController nameTextEditingController = TextEditingController();
-  TextEditingController nickNameTextEditingController = TextEditingController();
+
   final GlobalKey<FormState> formKey = GlobalKey();
   bool isEditable = false;
 
@@ -40,11 +41,8 @@ class _ProfileUpdateViewState extends ProfileUpdateViewModel with ValidateMixin,
     // TODO: implement initState
     super.initState();
     nameTextEditingController.text = Mazarbul.instance.getString(MazarbulKeyEnum.name) ?? "Nameless";
-    nickNameTextEditingController.text =
-        (Mazarbul.instance.getString(MazarbulKeyEnum.nickname) ?? "nameless").split("-").first;
 
-    if (Mazarbul.instance.getString(MazarbulKeyEnum.nickname) == "nameless" ||
-        Mazarbul.instance.getString(MazarbulKeyEnum.nickname) == null) {
+    if (Mazarbul.instance.getString(MazarbulKeyEnum.nickname) == null) {
       isEditable = true;
     }
   }
@@ -143,12 +141,20 @@ class _ProfileUpdateViewState extends ProfileUpdateViewModel with ValidateMixin,
               ),
               Card(
                 child: ListTile(
-                  title: isEditable
-                      ? TextFormField(
-                          controller: nickNameTextEditingController,
-                          validator: checkPleaseValidator(validateNickname, "Bu alan boş olamaz"),
-                        )
-                      : Text(Mazarbul.instance.getString(MazarbulKeyEnum.nickname) ?? ""),
+                  trailing: isEditable
+                      ? IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                              builder: (context) {
+                                return const UpdateNicknameView();
+                              },
+                            )).then((value) => setState(
+                                  () {},
+                                ));
+                          },
+                          icon: const Icon(Icons.edit))
+                      : null,
+                  title: Text(Mazarbul.instance.getString(MazarbulKeyEnum.nickname) ?? ""),
                   leading: const Icon(Icons.gamepad),
                 ),
               ),
@@ -159,11 +165,10 @@ class _ProfileUpdateViewState extends ProfileUpdateViewModel with ValidateMixin,
           ElevatedButton(
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
-                Mazarbul.instance.saveString(MazarbulKeyEnum.name, nameTextEditingController.value.text);
-                if (isEditable) {
-                  Mazarbul.instance.saveString(MazarbulKeyEnum.nickname,
-                      "${nickNameTextEditingController.value.text}-${generateRandom5DigitNumber()}");
-                }
+                Mazarbul.instance.saveString(
+                  MazarbulKeyEnum.name,
+                  nameTextEditingController.value.text,
+                );
 
                 Navigator.pop(context);
               } else {

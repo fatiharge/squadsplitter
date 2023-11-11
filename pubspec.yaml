@@ -31,6 +31,8 @@ dependencies:
   hive_generator: ^2.0.0
   mazarbul: ^1.1.0
   image_picker: ^1.0.4
+  nimphelos: 1.0.0
+
 
 dev_dependencies:
   flutter_test:

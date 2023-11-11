@@ -565,6 +565,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  nimphelos:
+    dependency: "direct main"
+    description:
+      name: nimphelos
+      sha256: c6a35517417aaec36e5e4974384c1c56b1f56574588d604c6fb3a1cab2f121f3
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   package_config:
     dependency: transitive
     description:

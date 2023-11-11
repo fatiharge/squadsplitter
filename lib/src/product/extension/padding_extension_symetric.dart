@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:squadsplitter/src/product/extension/context_extension.dart';
 
 extension PaddingExtensionSymetric on BuildContext {
-  EdgeInsets get horizontalPadding => const EdgeInsets.symmetric(horizontal: 16);
+  EdgeInsets get horizontalPadding => const EdgeInsets.symmetric(horizontal: 8);
 
   EdgeInsets get paddingLowVertical => EdgeInsets.symmetric(vertical: lowValue);
 
